@@ -1,0 +1,119 @@
+#include "cosaGame.hpp"
+
+#include <algorithm>
+
+CosaGame::CosaGame()
+  : m_player{},
+    m_inputString{},
+    m_target{},
+    m_timeIndex{ static_cast<int>(Time::validateFirstInput) }
+{
+    populateRulesTable();
+}
+
+void CosaGame::drawBoard()
+{
+    // TODO
+}
+
+bool CosaGame::gameRunning()
+{
+    return m_running;
+}
+
+void CosaGame::runGameEngine()
+{
+}
+
+bool CosaGame::isValidInput()
+{
+    return m_inputString.size() == 1
+        && m_inputString.front() >= '1'
+        && m_inputString.front() <= '9';
+}
+
+bool CosaGame::isValidResponse()
+{
+    return m_inputString.size() == 1
+        && m_inputString.front() == 'y'
+        || m_inputString.front() == 'Y'
+        || m_inputString.front() == 'n'
+        || m_inputString.front() == 'N';
+}
+
+bool CosaGame::playAgain()
+{
+    return m_playAgain;
+}
+
+bool CosaGame::targetSpaceEmpty()
+{
+    return m_gameBoard[m_target] == ' ';
+}
+
+bool CosaGame::winConditionExists()
+{
+    return std::ranges::any_of(m_match, [this](auto indexes)
+            {
+                return std::ranges::all_of(indexes, [this](int index)
+                        {
+                            return m_gameBoard[index] == m_player;
+                        });
+            });
+}
+
+void CosaGame::closeGame()
+{
+    m_running = false;
+}
+
+void CosaGame::placeSymbol()
+{
+    m_gameBoard[m_target] = m_player;
+}
+
+void CosaGame::requestFreeSpace()
+{
+    // TODO
+}
+
+void CosaGame::resetGameBoard()
+{
+    m_gameBoard.fill(' ');
+}
+
+void CosaGame::requestValidInput()
+{
+    // TODO
+}
+
+void CosaGame::setTargetValue()
+{
+    m_target = m_inputString.front();
+}
+
+void CosaGame::setPlayerToX()
+{
+    m_player = 'X';
+}
+
+void CosaGame::setPlayerToO()
+{
+    m_player = 'O';
+}
+
+void CosaGame::wantToPlayAgain()
+{
+    // TODO
+}
+
+void CosaGame::insertRule(int index, func state, proc trueProcedure,
+        int trueNext, proc falseProcedure, int falseNext, int trace)
+{
+    // TODO
+}
+
+void CosaGame::populateRulesTable()
+{
+    // TODO
+}
