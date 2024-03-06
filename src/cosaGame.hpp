@@ -28,12 +28,14 @@ private:
         validatePlacementInput,
         checkTargetSpace,
         checkForWin,
+        checkForDraw,
         validatePlayAgainResponse,
         playAgain,
 
     };
 
     // States
+    bool drawConditionExists() const;
     bool isValidInput() const;
     bool isValidResponse() const;
     bool isValidSelection() const;
@@ -44,6 +46,7 @@ private:
 
     // Behaviors
     void closeGame();
+    void gameDraw();
     void gameOver();
     void ignore();
     void placeSymbol();
@@ -88,7 +91,7 @@ private:
     char m_player;
 
     // Cosa Members
-    static constexpr int m_matrixRows = 7;
+    static constexpr int m_matrixRows = 8;
     std::ofstream m_traceFile;
     bool m_gameRunning = true;
     std::string m_inputString;

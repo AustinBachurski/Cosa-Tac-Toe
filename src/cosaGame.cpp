@@ -19,16 +19,16 @@ std::string CosaGame::gameBoard() const
 {
     return 
         "|-----------------------------|\n"
-        "|         |         |         |\n"
-        "|    " + std::string{m_gameBoard[0]} + "    |    " + std::string{m_gameBoard[1]} + "    |    " + std::string{m_gameBoard[2]} + "    |\n"
+        "|7        |8        |9        |\n"
+        "|    " + std::string{m_gameBoard[6]} + "    |    " + std::string{m_gameBoard[7]} + "    |    " + std::string{m_gameBoard[8]} + "    |\n"
         "|         |         |         |\n"
         "|-----------------------------|\n"
-        "|         |         |         |\n"
+        "|4        |5        |6        |\n"
         "|    " + std::string{m_gameBoard[3]} + "    |    " + std::string{m_gameBoard[4]} + "    |    " + std::string{m_gameBoard[5]} + "    |\n"
         "|         |         |         |\n"
         "|-----------------------------|\n"
-        "|         |         |         |\n"
-        "|    " + std::string{m_gameBoard[6]} + "    |    " + std::string{m_gameBoard[7]} + "    |    " + std::string{m_gameBoard[8]} + "    |\n"
+        "|1        |2        |3        |\n"
+        "|    " + std::string{m_gameBoard[0]} + "    |    " + std::string{m_gameBoard[1]} + "    |    " + std::string{m_gameBoard[2]} + "    |\n"
         "|         |         |         |\n"
         "|-----------------------------|\n";
 }
@@ -36,6 +36,14 @@ std::string CosaGame::gameBoard() const
 std::string CosaGame::gameMessage() const
 {
     return m_message;
+}
+
+bool CosaGame::drawConditionExists() const
+{
+    return std::ranges::none_of(m_gameBoard, [](char c)
+            {
+                return c == ' ';
+            });
 }
 
 bool CosaGame::gameRunning() const
@@ -191,6 +199,12 @@ void CosaGame::setPlayerValue()
     m_engineRunning = false;
 }
 
+void CosaGame::gameDraw()
+{
+    m_message = "The game is a draw, lame... Do you want to play again 'y'/'n'?";
+    m_engineRunning = false;
+}
+
 void CosaGame::gameOver()
 {
     m_message = "Game over, " + std::string{ m_player } + " wins."
@@ -205,7 +219,7 @@ void CosaGame::traceFalse()
         std::cout << "File not open!\n";
     }
 
-    m_traceFile << "False     " << m_trace[m_timeIndex];
+    m_traceFile << "False     " << m_trace[m_timeIndex] << '\n';
 }
 
 void CosaGame::traceTrue()
@@ -215,7 +229,7 @@ void CosaGame::traceTrue()
         std::cout << "File not open!\n";
     }
 
-    m_traceFile << "True      " << m_trace[m_timeIndex];
+    m_traceFile << "True      " << m_trace[m_timeIndex] << '\n';
 }
 
 void CosaGame::initializeTraceFile()
@@ -253,7 +267,8 @@ void CosaGame::populateRulesTable()
 
     insertRule( Time::validatePlacementInput,    &CosaGame::isValidInput,        &CosaGame::setTargetValue,      Time::checkTargetSpace,             &CosaGame::requestValidInput,       Time::validatePlayAgainResponse,    500    );
     insertRule( Time::checkTargetSpace,          &CosaGame::targetSpaceEmpty,    &CosaGame::placeSymbol,         Time::checkForWin,                  &CosaGame::requestFreeSpace,        Time::validatePlacementInput,       501    );
-    insertRule( Time::checkForWin,               &CosaGame::winConditionExists,  &CosaGame::gameOver,            Time::validatePlayAgainResponse,    &CosaGame::ignore,                  Time::nextPlayer,                   502    );
+    insertRule( Time::checkForWin,               &CosaGame::winConditionExists,  &CosaGame::gameOver,            Time::validatePlayAgainResponse,    &CosaGame::ignore,                  Time::checkForDraw,                 502    );
+    insertRule( Time::checkForDraw,              &CosaGame::drawConditionExists, &CosaGame::gameDraw,            Time::validatePlayAgainResponse,    &CosaGame::ignore,                  Time::nextPlayer,                   503    );
 
     insertRule( Time::validatePlayAgainResponse, &CosaGame::isValidResponse,     &CosaGame::ignore,              Time::playAgain,                    &CosaGame::requestValidResponse,    Time::validatePlayAgainResponse,    700    );
     insertRule( Time::playAgain,                 &CosaGame::playAgain,           &CosaGame::resetGame,           Time::validatePlayerSelection,      &CosaGame::closeGame,               Time::validatePlayerSelection,      702    );
@@ -272,7 +287,10 @@ void CosaGame::populateRulesTable()
     m_trace.at(static_cast<int>(Time::checkTargetSpace)) = 
         "       Time::checkTargetSpace,          &CosaGame::targetSpaceEmpty,    &CosaGame::placeSymbol,         Time::checkForWin,                  &CosaGame::requestFreeSpace,        Time::validatePlacementInput,       501";
     m_trace.at(static_cast<int>(Time::checkForWin)) = 
-        "       Time::checkForWin,               &CosaGame::winConditionExists,  &CosaGame::gameOver,            Time::validatePlayAgainResponse,    &CosaGame::ignore,                  Time::nextPlayer,                   502";
+        "       Time::checkForWin,               &CosaGame::winConditionExists,  &CosaGame::gameOver,            Time::validatePlayAgainResponse,    &CosaGame::ignore,                  Time::checkForDraw,                 502";
+
+    m_trace.at(static_cast<int>(Time::checkForDraw)) = 
+        "       Time::checkForDraw,              &CosaGame::drawConditionExists, &CosaGame::gameDraw,            Time::validatePlayAgainResponse,    &CosaGame::ignore,                  Time::nextPlayer,                   503";
 
     m_trace.at(static_cast<int>(Time::validatePlayAgainResponse)) = 
         "       Time::validatePlayAgainResponse, &CosaGame::isValidResponse,     &CosaGame::ignore,              Time::playAgain,                    &CosaGame::requestValidResponse,    Time::validatePlayAgainResponse,    700";

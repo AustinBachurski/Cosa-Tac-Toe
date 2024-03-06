@@ -1,4 +1,5 @@
 #include "cosaGame.hpp"
+
 #include <iostream>
 #include <string>
 
@@ -11,11 +12,11 @@ int main()
 
     while (game.gameRunning())
     {
+        std::system("cls");
         std::cout << game.gameBoard();
         std::cout << game.gameMessage();
 
         std::cin >> input;
         game.runGameEngine(input);
     }
-    system("cls");
 }
