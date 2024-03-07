@@ -1,7 +1,7 @@
 #include "cosaGame.hpp"
 
 #include <algorithm>
-#include <iostream>
+#include <print>
 
 CosaGame::CosaGame(const std::filesystem::path pathToTraceFile)
   : m_player{},
@@ -141,7 +141,7 @@ void CosaGame::placeSymbol()
 
 void CosaGame::requestFreeSpace()
 {
-    m_message = "That space is already taken, please select an empty space.";
+    m_message = "That space is already taken, please select an empty space.\n:> ";
     m_engineRunning = false;
 }
 
@@ -149,26 +149,26 @@ void CosaGame::resetGame()
 {
     m_gameBoard.fill(' ');
     m_message = "Welcome to Tic-Tac-Toe,"
-        " please choose which player goes first: 'X' or 'O'.";
+        " please choose which player goes first: 'X' or 'O'.\n:> ";
     m_engineRunning = false;
 }
 
 void CosaGame::requestValidInput()
 {
-    m_message = "Input can only be a board space: '1', '2', '3', etc.\n"
-        "please enter a valid space.";
+    m_message = "Input can only be a board space: '1', '2', '3', etc."
+        "please enter a valid space.\n:> ";
     m_engineRunning = false;
 }
 
 void CosaGame::requestValidResponse()
 {
-    m_message = "Input can only be 'y' or 'n', please enter a valid response.";
+    m_message = "Input can only be 'Y' or 'N', please enter a valid response.\n:> ";
     m_engineRunning = false;
 }
 
 void CosaGame::requestValidSelection()
 {
-    m_message = "Input can only be 'x' or 'o', please enter a valid option.";
+    m_message = "Input can only be 'X' or 'O', please enter a valid option.\n:> ";
     m_engineRunning = false;
 }
 
@@ -181,64 +181,49 @@ void CosaGame::setTargetValue()
 void CosaGame::setPlayerToX()
 {
     m_player = 'X';
-    m_message = "Player X' turn - select a space on the board (1-9).";
+    m_message = "Player X' turn - select a space on the board (1-9).\n:> ";
     m_engineRunning = false;
 }
 
 void CosaGame::setPlayerToO()
 {
     m_player = 'O';
-    m_message = "Player O's turn - select a space on the board (1-9).";
+    m_message = "Player O's turn - select a space on the board (1-9).\n:> ";
     m_engineRunning = false;
 }
 
 void CosaGame::setPlayerValue()
 {
     m_player = std::toupper(m_inputString.front());
-    m_message = "Player " + std::string{m_player} + "'s turn - select a space on the board (1-9).";
+    m_message = "Player " + std::string{m_player} + "'s turn - select a space on the board (1-9).\n:> ";
     m_engineRunning = false;
 }
 
 void CosaGame::gameDraw()
 {
-    m_message = "The game is a draw, lame... Do you want to play again 'y'/'n'?";
+    m_message = "The game is a draw, lame... Do you want to play again 'Y'/'N'?\n:> ";
     m_engineRunning = false;
 }
 
 void CosaGame::gameOver()
 {
     m_message = "Game over, " + std::string{ m_player } + " wins."
-        " Do you want to play again 'y'/'n'?";
+        " Do you want to play again 'Y'/'N'?\n:> ";
     m_engineRunning = false;
 }
 
 void CosaGame::traceFalse()
 {
-    if (!m_traceFile.is_open())
-    {
-        std::cout << "File not open!\n";
-    }
-
     m_traceFile << "False     " << m_trace[m_timeIndex] << '\n';
 }
 
 void CosaGame::traceTrue()
 {
-    if (!m_traceFile.is_open())
-    {
-        std::cout << "File not open!\n";
-    }
-
     m_traceFile << "True      " << m_trace[m_timeIndex] << '\n';
 }
 
 void CosaGame::initializeTraceFile()
 {
-    if (!m_traceFile.is_open())
-    {
-        return;
-    }
-
     m_traceFile << 
         "Introspective Trace for Tic-Tac-Toe\n\n"
         "                                                                                 True                            True                                    False                           False"
@@ -265,7 +250,7 @@ void CosaGame::populateRulesTable()
 
     insertRule( Time::nextPlayer,                &CosaGame::playerIsX,           &CosaGame::setPlayerToO,        Time::validatePlacementInput,       &CosaGame::setPlayerToX,            Time::validatePlacementInput,       300    );
 
-    insertRule( Time::validatePlacementInput,    &CosaGame::isValidInput,        &CosaGame::setTargetValue,      Time::checkTargetSpace,             &CosaGame::requestValidInput,       Time::validatePlayAgainResponse,    500    );
+    insertRule( Time::validatePlacementInput,    &CosaGame::isValidInput,        &CosaGame::setTargetValue,      Time::checkTargetSpace,             &CosaGame::requestValidInput,       Time::validatePlacementInput,    500    );
     insertRule( Time::checkTargetSpace,          &CosaGame::targetSpaceEmpty,    &CosaGame::placeSymbol,         Time::checkForWin,                  &CosaGame::requestFreeSpace,        Time::validatePlacementInput,       501    );
     insertRule( Time::checkForWin,               &CosaGame::winConditionExists,  &CosaGame::gameOver,            Time::validatePlayAgainResponse,    &CosaGame::ignore,                  Time::checkForDraw,                 502    );
     insertRule( Time::checkForDraw,              &CosaGame::drawConditionExists, &CosaGame::gameDraw,            Time::validatePlayAgainResponse,    &CosaGame::ignore,                  Time::nextPlayer,                   503    );

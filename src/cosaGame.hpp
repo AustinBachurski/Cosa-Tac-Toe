@@ -55,7 +55,6 @@ private:
     void requestValidInput();
     void requestValidResponse();
     void requestValidSelection();
-    void setPlayAgainResponse();
     void setTargetValue();
     void setPlayerToX();
     void setPlayerToO();
