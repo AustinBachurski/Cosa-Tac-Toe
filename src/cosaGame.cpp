@@ -250,7 +250,7 @@ void CosaGame::populateRulesTable()
 
     insertRule( Time::nextPlayer,                &CosaGame::playerIsX,           &CosaGame::setPlayerToO,        Time::validatePlacementInput,       &CosaGame::setPlayerToX,            Time::validatePlacementInput,       300    );
 
-    insertRule( Time::validatePlacementInput,    &CosaGame::isValidInput,        &CosaGame::setTargetValue,      Time::checkTargetSpace,             &CosaGame::requestValidInput,       Time::validatePlacementInput,    500    );
+    insertRule( Time::validatePlacementInput,    &CosaGame::isValidInput,        &CosaGame::setTargetValue,      Time::checkTargetSpace,             &CosaGame::requestValidInput,       Time::validatePlacementInput,       500    );
     insertRule( Time::checkTargetSpace,          &CosaGame::targetSpaceEmpty,    &CosaGame::placeSymbol,         Time::checkForWin,                  &CosaGame::requestFreeSpace,        Time::validatePlacementInput,       501    );
     insertRule( Time::checkForWin,               &CosaGame::winConditionExists,  &CosaGame::gameOver,            Time::validatePlayAgainResponse,    &CosaGame::ignore,                  Time::checkForDraw,                 502    );
     insertRule( Time::checkForDraw,              &CosaGame::drawConditionExists, &CosaGame::gameDraw,            Time::validatePlayAgainResponse,    &CosaGame::ignore,                  Time::nextPlayer,                   503    );
@@ -268,7 +268,7 @@ void CosaGame::populateRulesTable()
         "       Time::nextPlayer,                &CosaGame::playerIsX,           &CosaGame::setPlayerToO,        Time::validatePlacementInput,       &CosaGame::setPlayerToX,            Time::validatePlacementInput,       300";
 
     m_trace.at(static_cast<int>(Time::validatePlacementInput)) = 
-        "       Time::validatePlacementInput,    &CosaGame::isValidInput,        &CosaGame::setTargetValue,      Time::checkTargetSpace,             &CosaGame::requestValidInput,       Time::validatePlayAgainResponse,    500";
+        "       Time::validatePlacementInput,    &CosaGame::isValidInput,        &CosaGame::setTargetValue,      Time::checkTargetSpace,             &CosaGame::requestValidInput,       Time::validatePlacementInput,       500";
     m_trace.at(static_cast<int>(Time::checkTargetSpace)) = 
         "       Time::checkTargetSpace,          &CosaGame::targetSpaceEmpty,    &CosaGame::placeSymbol,         Time::checkForWin,                  &CosaGame::requestFreeSpace,        Time::validatePlacementInput,       501";
     m_trace.at(static_cast<int>(Time::checkForWin)) = 
