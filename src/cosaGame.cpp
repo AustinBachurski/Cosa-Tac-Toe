@@ -215,19 +215,23 @@ void CosaGame::gameOver()
 void CosaGame::traceFalse()
 {
     m_traceFile << "False     " << m_trace[m_timeIndex] << '\n';
+    m_traceFile.flush();
 }
 
 void CosaGame::traceTrue()
 {
     m_traceFile << "True      " << m_trace[m_timeIndex] << '\n';
+    m_traceFile.flush();
 }
 
 void CosaGame::initializeTraceFile()
 {
-    m_traceFile << 
-        "Introspective Trace for Tic-Tac-Toe\n\n"
-        "                                                                                 True                            True                                    False                           False"
-        "Evaluation       Rule                            State                           Behavior                        Next                                    Behavior                        Next                                Trace";
+    m_traceFile <<
+        "Introspective Trace for Tic-Tac-Toe\n"
+        "                                                                                  True                            True                                False                               False\n"
+        "Evaluation       Rule                             State                           Behavior                        Next                                Behavior                            Next                                Trace\n"
+        "-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n";
+    m_traceFile.flush();
 }
 
 void CosaGame::insertRule(Time index, func state, proc trueProcedure,
