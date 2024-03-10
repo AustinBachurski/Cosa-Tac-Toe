@@ -95,8 +95,10 @@ private:
     bool m_gameRunning = true;
     std::string m_inputString;
     bool m_engineRunning = true;
+    proc m_falseTrace = &CosaGame::traceFalse;
     int m_target;
     int m_timeIndex;
+    proc m_trueTrace = &CosaGame::traceTrue;
 
     // Cosa Matrix Row
     struct tGame {
