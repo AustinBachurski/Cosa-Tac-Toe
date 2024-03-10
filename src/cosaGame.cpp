@@ -95,13 +95,13 @@ void CosaGame::runGameEngine(const std::string& input)
         if ((this->*(m_logic[m_timeIndex].state))())
         {
             (this->*(m_logic[m_timeIndex].trueProcedure))();
-            traceTrue();
+            (this->*(m_trueTrace))();
             m_timeIndex = m_logic[m_timeIndex].trueNext;
         }
         else
         {
             (this->*(m_logic[m_timeIndex].falseProcedure))();
-            traceFalse();
+            (this->*(m_falseTrace))();
             m_timeIndex = m_logic[m_timeIndex].falseNext;
         }
     }
@@ -226,6 +226,13 @@ void CosaGame::traceTrue()
 
 void CosaGame::initializeTraceFile()
 {
+    if (!m_traceFile.is_open())
+    {
+        m_trueTrace = &CosaGame::ignore;
+        m_falseTrace = &CosaGame::ignore;
+        return;
+    }
+
     m_traceFile <<
         "Introspective Trace for Tic-Tac-Toe\n"
         "                                                                                  True                            True                                False                               False\n"
@@ -286,4 +293,3 @@ void CosaGame::populateRulesTable()
     m_trace.at(static_cast<int>(Time::playAgain)) = 
         "       Time::playAgain,                 &CosaGame::playAgain,           &CosaGame::resetGame,           Time::validatePlayerSelection,      &CosaGame::closeGame,               Time::validatePlayerSelection,      702";
 }
-
