@@ -95,13 +95,13 @@ void CosaGame::runGameEngine(const std::string& input)
         if ((this->*(m_logic[m_timeIndex].state))())
         {
             (this->*(m_logic[m_timeIndex].trueProcedure))();
-            (this->*(m_trueTrace))();
+            traceTrue();
             m_timeIndex = m_logic[m_timeIndex].trueNext;
         }
         else
         {
             (this->*(m_logic[m_timeIndex].falseProcedure))();
-            (this->*(m_falseTrace))();
+            traceFalse();
             m_timeIndex = m_logic[m_timeIndex].falseNext;
         }
     }
@@ -226,13 +226,6 @@ void CosaGame::traceTrue()
 
 void CosaGame::initializeTraceFile()
 {
-    if (!m_traceFile.is_open())
-    {
-        m_trueTrace = &CosaGame::ignore;
-        m_falseTrace = &CosaGame::ignore;
-        return;
-    }
-
     m_traceFile <<
         "Introspective Trace for Tic-Tac-Toe\n"
         "                                                                                  True                            True                                False                               False\n"
@@ -241,7 +234,7 @@ void CosaGame::initializeTraceFile()
     m_traceFile.flush();
 }
 
-void CosaGame::insertRule(Time index, func state, proc trueProcedure,
+constexpr void CosaGame::insertRule(Time index, func state, proc trueProcedure,
         Time trueNext, proc falseProcedure, Time falseNext, int trace)
 {
     m_logic.at(static_cast<int>(index)).state = state;
@@ -252,7 +245,7 @@ void CosaGame::insertRule(Time index, func state, proc trueProcedure,
     m_logic.at(static_cast<int>(index)).trace = trace;
 }
 
-void CosaGame::populateRulesTable()
+constexpr void CosaGame::populateRulesTable()
 {
     // Cosa Matrix
     //                                                                           True                            True                                False                               False
