@@ -64,7 +64,7 @@ private:
 
     // Initialization
     void initializeTraceFile();
-    constexpr void insertRule(
+    void insertRule(
             Time index,
             func state,
             proc trueProcedure,
@@ -72,11 +72,11 @@ private:
             proc falseProcedure,
             Time falseNext,
             int trace);
-    constexpr void populateRulesTable();
+    void populateRulesTable();
 
     // Game Members
     std::array<char, 9> m_gameBoard;
-    const std::array<std::array<int, 3>, 8> m_match = {{
+    std::array<std::array<int, 3>, 8> m_match = {{
         { 0, 1, 2 },
         { 3, 4, 5 },
         { 6, 7, 8 },
@@ -95,8 +95,10 @@ private:
     bool m_gameRunning = true;
     std::string m_inputString;
     bool m_engineRunning = true;
+    proc m_falseTrace = &CosaGame::traceFalse;
     int m_target;
     int m_timeIndex;
+    proc m_trueTrace = &CosaGame::traceTrue;
 
     // Cosa Matrix Row
     struct tGame {
