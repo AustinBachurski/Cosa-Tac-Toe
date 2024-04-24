@@ -12,7 +12,12 @@ int main()
 
     while (game.gameRunning())
     {
+        #ifdef _WIN32
+        std::system("cls");
+        #else
         std::system("clear");
+        #endif
+
         std::cout << game.gameBoard();
         std::cout << game.gameMessage();
 
